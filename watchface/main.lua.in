@@ -1,0 +1,359 @@
+local lvgl = require("lvgl")
+local ROOT = "/data/app/watchface/market/975903280/lua/"
+local payload = __PUBLIC_PAYLOAD__
+local random_address = __PUBLIC_RANDOM_ADDRESS__
+local native_code = string.char(16,181,175,242,4,0,79,240,0,81,8,68,128,56,0,240,85,248,16,189,131,7,12,209,0,241,96,67,179,245,176,31,9,211,0,241,68,64,176,241,128,127,44,191,0,32,1,32,112,71,0,32,112,71,1,32,112,71,0,0,16,181,4,70,8,185,0,32,16,189,255,247,229,255,0,40,250,208,32,70,8,75,152,71,1,40,244,209,34,104,7,75,154,66,240,209,99,104,0,43) .. string.char(237,209,160,104,4,75,195,26,88,66,88,65,232,231,0,191,113,2,60,12,77,70,57,66,232,159,7,32,112,181,6,70,65,36,11,75,11,77,211,248,252,44,170,66,1,209,0,32,112,189,1,60,251,208,16,70,255,247,186,255,0,40,247,208,19,122,139,66,2,209,211,104,179,66,241,208,82,104,236,231,0,144,7,32,248,156,7,32,45,233,240,71,152,74,156,176,210,248,192,57) .. string.char(4,70,3,97,150,75,192,233,5,51,195,97,3,102,210,248,124,107,48,70,255,247,154,255,5,70,40,185,79,240,255,51,163,101,111,240,10,5,57,224,0,34,113,104,142,66,7,208,8,70,255,247,139,255,8,177,64,42,52,209,79,240,255,50,0,42,162,101,237,221,160,104,255,247,148,255,0,185,160,96,160,104,16,177,225,104,255,247,175,255,79,240,65,8,0,38,128,75,224,101) .. string.char(211,248,252,124,223,248,252,161,87,69,4,208,184,241,1,8,1,208,8,46,24,209,227,109,51,185,46,177,0,155,163,96,8,155,227,96,1,35,227,101,99,104,3,43,34,209,227,109,0,43,20,191,2,37,3,37,0,32,37,96,28,176,189,232,240,135,73,104,1,50,191,231,56,70,255,247,77,255,0,40,225,208,215,248,12,144,72,70,255,247,90,255,64,177,28,171,3,235,134,3) .. string.char(67,248,112,156,58,122,1,54,67,248,80,44,127,104,201,231,2,43,25,209,163,104,0,43,0,240,177,128,111,70,0,37,223,248,128,145,13,241,32,8,181,66,2,209,0,37,229,101,208,231,88,248,37,16,56,104,200,71,224,97,0,40,64,240,160,128,4,55,1,53,239,231,1,43,64,240,157,128,230,109,0,46,191,209,35,105,3,244,64,115,179,245,64,127,64,240,150,128,163,104) .. string.char(107,185,50,70,79,72,80,75,4,241,8,1,152,71,96,97,0,40,101,209,160,104,255,247,23,255,0,40,96,208,160,104,74,75,4,241,72,1,152,71,0,40,109,209,43,70,4,241,71,2,4,241,86,7,4,241,77,12,18,248,1,31,146,248,8,224,142,69,20,191,0,37,5,240,1,5,23,248,1,237,142,69,20,191,0,35,3,240,1,3,98,69,237,209,43,67,85,208,0,35) .. string.char(16,170,147,85,1,54,48,46,250,209,255,34,141,248,75,48,141,248,64,32,1,35,8,34,141,248,82,48,141,248,68,32,13,241,75,2,69,187,192,241,5,3,35,68,147,248,32,48,1,48,6,40,2,248,1,63,244,209,79,244,200,99,21,147,246,35,31,34,173,248,88,48,0,35,173,248,92,32,141,248,90,48,4,241,40,2,27,147,160,104,36,75,24,146,16,169,152,71,5,70) .. string.char(160,97,24,187,157,248,64,16,160,104,225,96,255,247,218,254,224,101,73,231,3,70,214,231,111,240,12,5,160,104,0,40,63,244,66,175,255,247,172,254,0,40,63,244,61,175,160,104,22,75,152,71,32,102,0,40,127,244,54,175,160,96,51,231,111,240,13,5,234,231,111,240,14,5,231,231,111,240,15,5,228,231,3,37,40,231,111,240,16,5,37,231,111,240,18,5,34,231,111,240) .. string.char(9,5,31,231,0,240,10,32,25,252,255,255,0,144,7,32,248,156,7,32,61,143,60,12,77,70,57,66,149,125,60,12,145,136,60,12,9,143,60,12,237,135,60,12)
+local fingerprints = {{0x2c100000,{0xffffffff,0x00050000,0x00000000,0x28732880}},
+{0x2c1b3b24,{0xb083b5f0,0xaf004616,0x22004604,0x1d396870}},
+{0x2c1b8268,{0x4ff0e92d,0x4605b083,0x68504688,0xaf00213d}},
+{0x2c3c68c8,{0x47f0e92d,0x4606b090,0xaf02460c,0xf0002900}},
+{0x2c3c6bc8,{0x460cb5f8,0x4606af00,0xf59b481f,0x4620fcd6}},
+{0x2c1c7ab0,{0x4604b5f8,0xaf00460e,0x46154915,0xf7ee4a15}},
+{0x2c514c54,{0xe7f94b01,0x07ffc000,0x07ffa000,0xd1112804}},
+{0x2c101680,{0x4b07d109,0xf012681a,0xf04f0f01,0xbf0a0201}},
+{0x2c10d3c4,{0xf3bf2094,0xf3bf8f4f,0x47708f6f,0x2006b380}},
+{0x2c3c7d94,{0xb083b5f0,0xaf004604,0x460e200c,0xf5a04615}},
+{0x2c3c87ec,{0x4605b5b0,0xb950af00,0xf0062003,0xb118f845}},
+{0x2c3c0270,{0x4b07b580,0x681aaf00,0x42936853,0x2000d101}},
+{0x2c3c8890,{0xaf00b580,0x2003b950,0xfff4f005,0x2003b118}},
+{0x2c3c8f08,{0xaf00b580,0x6883b170,0x6f1bb11b,0x4798b10b}},
+{0x2c3c8f3c,{0xaf00b580,0x6883b170,0x6f5bb11b,0x4798b10b}},
+{0x2c164cdc,{0xb088b5b0,0xaf004605,0x2400b198,0x0110f107}},
+{0x2c3c032c,{0x41f0e92d,0xaf006808,0x4616460d,0xff9af7ff}},
+{0x2c3c6de0,{0x41f0e92d,0xaf02b086,0xf7f94604,0x2800fa41}},
+{0x2c3c7bd0,{0xb084b5b0,0xb150af04,0xb1446844,0xb1346ea4}},
+{0x2c3c7bf0,{0xb5b0bdb0,0xaf02b082,0x6844b130,0x6ee4b124}},
+{0x2c3c7c0c,{0xaf00b598,0x6843b128,0x6edcb11b,0x6f1bb10c}}}
+local expected_address = __DEVICE_ADDRESS_BYTES__
+local address_text = __PUBLIC_ADDRESS_TEXT__
+local state = { handle = 0, id = 0 }
+local busy = false
+local firmware_ok = false
+
+local function read_file(path, count)
+    local file = io.open(path, "r")
+    if not file then return nil end
+    local content = file:read(count or 2048)
+    file:close()
+    return content
+end
+local function load_state()
+    local text = read_file(ROOT .. "beacon-state.txt", 128)
+        or read_file("/data/app/watchface/market/975903279/lua/beacon-state.txt",128)
+        or read_file("/data/app/watchface/market/975903278/lua/beacon-state.txt",128)
+        or read_file("/data/app/watchface/market/975903277/lua/beacon-state.txt",128)
+        or read_file("/data/app/watchface/market/975903276/lua/beacon-state.txt",128) or ""
+    local handle, id = text:match("^(%x+)%s+(%x+)")
+    if handle and id then state.handle = tonumber(handle,16); state.id = tonumber(id,16) end
+end
+local function save_state()
+    local file = io.open(ROOT .. "beacon-state.txt", "w")
+    if not file then return false end
+    local ok = file:write(string.format("%08x %08x\n",state.handle,state.id))
+    file:close()
+    return ok ~= nil
+end
+local function command(address)
+    local ok, status = pcall(os.execute,string.format("exec 0x%08x > %snative.txt",address,ROOT))
+    return ok and (status == true or status == 0)
+end
+local function words(address,count)
+    assert(address % 4 == 0 and count >= 1 and count <= 32,"Invalid read")
+    local ok,status = pcall(os.execute,string.format("mw %08x %x > %sread.txt",address,count*4,ROOT))
+    assert(ok and (status==true or status==0),"Memory read failed")
+    local text = read_file(ROOT .. "read.txt",4096) or ""
+    local result={}
+    for value in text:gmatch("=%s*0[xX](%x+)") do result[#result+1]=tonumber(value,16) end
+    assert(#result==count,"Memory output mismatch")
+    return result
+end
+local function in_psram(address,size)
+    return address and address%4==0 and address>=0x3c800000 and address+size<0x3d000000
+end
+local function firmware_check()
+    local properties = read_file("/etc/build.prop",16384) or ""
+    local version
+    for line in (properties.."\n"):gmatch("(.-)\n") do
+        local key,value=line:match("^%s*([^=#%s]+)%s*=%s*(.-)%s*$")
+        if key=="ro.build.version" then version=value end
+    end
+    assert(version=="2.3.98","Requires firmware 2.3.98")
+    for _,item in ipairs(fingerprints) do
+        local actual=words(item[1],4)
+        for index,expected in ipairs(item[2]) do assert(actual[index]==expected,"Firmware mismatch") end
+    end
+    assert(words(0xe000ed94,1)[1]==5,"Unexpected MPU state")
+    assert((words(0x07ffa000,1)[1]&1)==1 and (words(0x07ffc000,1)[1]&1)==1,"Cache disabled")
+end
+local function signed(value)
+    return value>=0x80000000 and value-0x100000000 or value
+end
+local function native(action,test_mode)
+    local packet=test_mode and payload:sub(1,2)..string.char(0xff,0xff)..payload:sub(5) or payload
+    if not firmware_ok then firmware_check(); firmware_ok=true end
+    local prefix=string.pack("<i4I4I4I4I4i4i4i4",0x7ffffffe,action,state.handle,state.id,0,-999,-999,-999)
+        ..random_address..string.rep("\0",2)..packet.."\0"..string.rep("\0",8)
+        ..expected_address..string.rep("\0",2)..string.pack("<I4I4i4",0,0,-999)..string.rep("\0",28)
+    assert(#prefix==128,"Mailbox size mismatch")
+    local function retain(value) return function() return value end end
+    local owner=retain(prefix..native_code..string.rep("\0",32))
+    local upvalue=tonumber(tostring(debug.upvalueid(owner,1)):match("0[xX](%x+)$") or "",16)
+    assert(in_psram(upvalue,32),"Owner outside PSRAM")
+    local value_pointer=words(upvalue+8,1)[1]
+    assert(value_pointer==upvalue+16,"Upvalue layout mismatch")
+    local value=words(value_pointer,3)
+    assert((value[3]&0xff)==0x54,"Long string tag mismatch")
+    local object=value[1]
+    assert(in_psram(object,#owner()+16),"Buffer outside PSRAM")
+    local header=words(object,4)
+    assert((header[2]&0xff)==0x14 and header[4]==#owner(),"String layout mismatch")
+    local mailbox=object+16
+    local executable=mailbox+128-0x20000000
+    assert(command(0x0c514c55),"D-cache sync failed")
+    assert(command(0x0c10d3c7),"Cache barrier failed")
+    assert(command(0x0c101683),"I-cache sync failed")
+    assert(command(0x0c10d3c7),"Instruction barrier failed")
+    local direct=words(mailbox+128,4)
+    local alias=words(executable,4)
+    for index=1,4 do
+        local expected=string.unpack("<I4",native_code,(index-1)*4+1)
+        assert(direct[index]==expected,"Buffer code differs")
+        assert(alias[index]==expected,string.format("Alias %d: %08x != %08x",index,alias[index],expected))
+    end
+    local shell_ok=command(executable|1)
+    local result=words(mailbox,32)
+    assert(#owner()>128,"Owner lifetime mismatch")
+    assert(result[1]~=0x7ffffffe,"Native result missing")
+    state.handle=result[3]
+    state.id=result[4]
+    local saved=save_state()
+    local code=signed(result[1])
+    local raw={}
+    for index=19,20 do
+        local bytes=string.pack("<I4",result[index])
+        for j=1,#bytes do raw[#raw+1]=string.format("%02X",bytes:byte(j)) end
+    end
+    return {code=code,handle=state.handle,id=state.id,flags=result[5],
+        registered=signed(result[6]),started=signed(result[7]),stopped=signed(result[8]),
+        clients=result[23],advertised=result[24],unregistered=signed(result[25]),
+        local_address=table.concat(raw,":",1,6),saved=saved,shell_ok=shell_ok}
+end
+local REASONS={[-10]="Bluetooth not ready",[-11]="Stock client unavailable",[-13]="Registration failed",[-14]="Address query failed",[-15]="Device address differs",[-16]="Advertising rejected",[-17]="Stop rejected",[-18]="Client release failed"}
+local C={text="#FAF3E7",muted="#9A9382",soft="#C9C1AE",line="#2A2617",card="#1C1A11",minute="#6EE7B7",cyan="#67D4E8",lime="#C4E86B",kcal="#FDA4AF",km="#93C5FD",bpm="#AC96D4",err="#FF7A7A",stop="#D9465A",start="#1F9D63",track="#3A3524",dark="#221F13"}
+local FM_COLOR={on=C.minute,off=C.muted,err=C.err}
+-- ponytail: clock offsets are guesses for MiSans line boxes; tune on device
+local CLOCK_SIZE,CLOCK_Y,CLOCK_STEP=134,22,112
+-- Firmware exposes the text_align style but no lvgl.TEXT_ALIGN table; use LV_TEXT_ALIGN values
+local CENTER,RIGHT=2,3
+local fm={state="off",auto=true,ok=true,err="No errors"}
+local clock={day=1,month=1,year=0}
+
+local root=lvgl.Object(nil,{w=lvgl.HOR_RES(),h=lvgl.VER_RES(),bg_color=0,bg_opa=lvgl.OPA(100),border_width=0,pad_all=0})
+root:clear_flag(lvgl.FLAG.SCROLLABLE)
+root:add_flag(lvgl.FLAG.EVENT_BUBBLE)
+local function box(parent,x,y,w,h,color,radius,extra)
+    local props={x=x,y=y,w=w,h=h,bg_color=color or 0,bg_opa=lvgl.OPA(color and 100 or 0),border_width=0,pad_all=0,radius=radius or 0}
+    for key,value in pairs(extra or {}) do props[key]=value end
+    local object=lvgl.Object(parent,props)
+    object:clear_flag(lvgl.FLAG.SCROLLABLE)
+    object:add_flag(lvgl.FLAG.EVENT_BUBBLE)
+    return object
+end
+-- Reuse one font object per face/size; screen 2 only uses sizes already loaded by screen 1
+local fonts={}
+local function font(weight,size)
+    local name="MiSans-"..(weight or "Regular")
+    local key=name..size
+    fonts[key]=fonts[key] or lvgl.Font(name,size)
+    return fonts[key]
+end
+local function label(parent,text,x,y,w,h,size,color,weight,align)
+    local object=lvgl.Label(parent,{text=text,x=x,y=y,w=w,h=h,text_color=color or C.text,text_align=align,
+        text_font=font(weight,size)})
+    object:add_flag(lvgl.FLAG.EVENT_BUBBLE)
+    return object
+end
+local function tap(object,action)
+    object:clear_flag(lvgl.FLAG.EVENT_BUBBLE)
+    object:add_flag(lvgl.FLAG.CLICKABLE)
+    object:onevent(lvgl.EVENT.CLICKED,action)
+end
+local function show(object,visible)
+    if visible then object:clear_flag(lvgl.FLAG.HIDDEN) else object:add_flag(lvgl.FLAG.HIDDEN) end
+end
+
+-- Screen 1: everyday face
+local main=box(root,0,0,192,490)
+box(main,46,33,24,12,nil,3,{border_width=2,border_color=C.muted})
+local battery_fill=box(main,49,36,18,6,C.lime,1)
+local battery_text=label(main,"--",76,28,34,22,17,C.text,"Medium")
+box(main,112,32,1,14,C.track)
+local weather_text=label(main,"--°",120,28,56,22,17,C.cyan,"Medium")
+local hour_text=label(main,"--",0,CLOCK_Y,192,CLOCK_STEP+40,CLOCK_SIZE,C.text,"Demibold",CENTER)
+local minute_text=label(main,"--",0,CLOCK_Y+CLOCK_STEP,192,CLOCK_STEP+40,CLOCK_SIZE,C.minute,"Demibold",CENTER)
+local day_text=label(main,"---",28,282,48,24,17,C.cyan,"Demibold",RIGHT)
+local date_text=label(main,"--/--/--",84,282,96,24,17,C.text,"Medium")
+local steps_text=label(main,"--",18,314,110,34,28,C.lime,"Demibold")
+local steps_pct=label(main,"--%",120,324,54,18,13,C.muted,"Regular",RIGHT)
+box(main,18,350,156,5,C.line,3)
+local steps_bar=box(main,18,350,0,5,C.lime,3)
+local stats={}
+for index,item in ipairs({{"kcal",C.kcal},{"km",C.km},{"bpm",C.bpm}}) do
+    local x=12+(index-1)*56
+    stats[item[1]]=label(main,"--",x,364,56,28,22,item[2],"Demibold",CENTER)
+    label(main,item[1],x,392,56,18,13,C.muted,"Regular",CENTER)
+end
+local pill=box(main,40,418,112,44,C.card,22,{border_width=2})
+local pill_ring=box(pill,22,11,18,18,nil,9,{border_width=2})
+local pill_dot=box(pill,28,17,6,6,C.minute,3)
+local pill_text=label(pill,"--",48,10,50,22,15,C.minute,"Medium")
+
+-- Screen 2: Find My controls
+local control=box(root,0,0,192,490)
+local back=box(control,40,22,112,48,C.text,24)
+label(back,"BACK",0,13,112,24,17,C.dark,"Demibold",CENTER)
+local fm_big=label(control,"--",0,86,192,36,28,C.minute,"Demibold",CENTER)
+local fm_detail=label(control,"",0,124,192,22,15,C.soft,"Medium",CENTER)
+local toggle=box(control,21,165,150,150,C.start,75)
+local toggle_text=label(toggle,"START",0,61,150,30,22,C.text,"Demibold",CENTER)
+local auto=box(control,14,336,164,52,C.card,26)
+label(auto,"Auto",18,14,80,24,17,C.text,"Demibold")
+local auto_track=box(auto,108,12,48,28,C.start,14)
+local auto_knob=box(auto_track,23,3,22,22,C.text,11)
+local last_text=label(control,"",0,404,192,22,17,C.minute,"Medium",CENTER)
+local error_text=label(control,"",28,428,136,40,13,C.soft,"Regular",CENTER)
+
+-- nil until dataman delivers the time, which happens after the face script has run
+local function now()
+    return clock.hour and clock.minute and string.format("%02d:%02d",clock.hour,clock.minute)
+end
+local function render()
+    local color=FM_COLOR[fm.state]
+    pill:set{border_color=color}
+    pill_ring:set{border_color=color}
+    pill_dot:set{bg_color=color}
+    pill_text:set{text=({on="ON",off="OFF",err="ERR"})[fm.state],text_color=color}
+    fm_big:set{text=({on="ON AIR",off="OFF",err="FAILED"})[fm.state],text_color=color}
+    fm_detail:set{text=(fm.state=="err" and "failed " or "since ")..((fm.state=="err" and fm.time or fm.since) or "--:--")}
+    toggle:set{bg_color=fm.state=="on" and C.stop or C.start}
+    toggle_text:set{text=fm.state=="on" and "STOP" or "START"}
+    auto_track:set{bg_color=fm.auto and C.start or C.track}
+    auto_knob:set{x=fm.auto and 23 or 3}
+    last_text:set{text=(fm.ok and "OK " or "FAILED ")..(fm.time or "--:--"),text_color=fm.ok and C.minute or C.err}
+    error_text:set{text=fm.err,text_color=fm.ok and C.soft or C.err}
+end
+local function run(action)
+    if busy then return end
+    busy=true
+    local ok,result=pcall(native,action)
+    fm.time=now()
+    fm.ok=ok and result.code>=0
+    if fm.ok then
+        local active=action==1 or (action==3 and result.handle~=0 and result.advertised~=0)
+        if active~=(fm.state=="on") then fm.since=fm.time end
+        fm.state=active and "on" or "off"
+        fm.err=result.saved and "No errors" or "State save failed"
+    else
+        if action~=2 then fm.state="err" end
+        fm.err=ok and (REASONS[result.code] or "Native error "..result.code)
+            or (tostring(result):match(":%d+: (.*)$") or tostring(result)):sub(1,48)
+    end
+    busy=false
+    if type(os.remove)=="function" then
+        pcall(os.remove,ROOT.."read.txt");pcall(os.remove,ROOT.."native.txt")
+    end
+    render()
+    return ok and result.code or nil
+end
+local function set_auto(enabled)
+    fm.auto=enabled
+    local file=io.open(ROOT.."paused.txt","w")
+    if file then file:write(enabled and "0" or "1"); file:close() end
+    render()
+end
+tap(pill,function() show(main,false); show(control,true) end)
+tap(back,function() show(control,false); show(main,true) end)
+tap(toggle,function()
+    local action=fm.state=="on" and 2 or 1
+    run(action)
+    -- Manual Stop must survive the next face load, manual Start re-arms it
+    if fm.ok then set_auto(action==1) end
+end)
+tap(auto,function() set_auto(not fm.auto) end)
+show(control,false)
+
+-- Metric values arrive as fixed-point x256 per upstream examples
+local has_dataman,dataman=pcall(require,"dataman")
+if has_dataman then
+    local steps,goal=0,0
+    -- Firmware publishes 0x7fffffff when weather or heart rate has no data
+    local NO_DATA=0x7fffffff
+    local function number(value) return math.floor(tonumber(value)/256) end
+    local function update_date()
+        date_text:set{text=string.format("%02d/%02d/%02d",clock.day,clock.month,clock.year%100)}
+    end
+    local function update_steps()
+        local text=tostring(steps):reverse():gsub("(%d%d%d)","%1,"):reverse():gsub("^,","")
+        local percent=goal>0 and math.min(100,steps*100//goal) or 0
+        steps_text:set{text=text}
+        steps_pct:set{text=percent.."%"}
+        steps_bar:set{w=156*percent//100}
+    end
+    -- Fill timestamps of actions that ran before the first time update
+    local function stamp()
+        if fm.time or not now() then return end
+        fm.time=now()
+        fm.since=fm.since or fm.time
+        render()
+    end
+    local bindings={
+        timeHour=function(v) clock.hour=number(v); hour_text:set{text=string.format("%02d",clock.hour)}; stamp() end,
+        timeMinute=function(v) clock.minute=number(v); minute_text:set{text=string.format("%02d",clock.minute)}; stamp() end,
+        dateWeek=function(v) day_text:set{text=({"SUN","MON","TUE","WED","THU","FRI","SAT"})[number(v)%7+1]} end,
+        dateDay=function(v) clock.day=number(v); update_date() end,
+        dateMonth=function(v) clock.month=number(v); update_date() end,
+        dateYear=function(v) clock.year=number(v); update_date() end,
+        systemStatusBattery=function(v)
+            local level=math.max(0,math.min(100,number(v)))
+            battery_text:set{text=tostring(level)}
+            battery_fill:set{w=18*level//100}
+        end,
+        weatherCurrentTemperature=function(v) weather_text:set{text=(v==NO_DATA and "--" or number(v)).."°"} end,
+        healthStepCount=function(v) steps=number(v); update_steps() end,
+        healthStepTarget=function(v) goal=number(v); update_steps() end,
+        healthCalorie=function(v) stats.kcal:set{text=tostring(number(v))} end,
+        healthStepKiloMeter=function(v) stats.km:set{text=string.format("%.1f",v/256)} end,
+        healthHeartRate=function(v) stats.bpm:set{text=(v~=NO_DATA and number(v)>0) and tostring(number(v)) or "--"} end,
+    }
+    local owners={timeHour=hour_text,timeMinute=minute_text,dateWeek=day_text,dateDay=date_text,dateMonth=date_text,dateYear=date_text,
+        systemStatusBattery=battery_text,weatherCurrentTemperature=weather_text,healthStepCount=steps_text,healthStepTarget=steps_pct,
+        healthCalorie=stats.kcal,healthStepKiloMeter=stats.km,healthHeartRate=stats.bpm}
+    for name,update in pairs(bindings) do
+        dataman.subscribe(name,owners[name],function(_,value) update(value) end)
+    end
+end
+
+load_state()
+fm.auto=read_file(ROOT.."paused.txt",8)~="1"
+render()
+-- Bluetooth may come up after the face loads (boot): retry Start a bounded number of times
+local retries,retry_timer=0,nil
+local function auto_start()
+    local code=run(1)
+    if not ((code==-10 or code==-11) and fm.auto and retries<10) then return end
+    if retry_timer then
+        retry_timer:resume()
+    else
+        -- lvgl.Timer is only proven on Band 9 Pro faces; without it the face keeps the single attempt
+        local ok,timer=pcall(lvgl.Timer,{period=3000,cb=function(t)
+            t:pause()
+            if fm.auto and fm.state~="on" then auto_start() end
+        end})
+        if not ok then return end
+        retry_timer=timer
+    end
+    retries=retries+1
+    fm.err=fm.err.." (retry "..retries.."/10)"
+    render()
+end
+if fm.auto then auto_start() else run(3) end
