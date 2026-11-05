@@ -23,6 +23,7 @@ The Xiaomi Smart Band 9 has Bluetooth. This project ships a custom watchface tha
 |---|:---:|:---:|:---:|
 | Make your key, build the watchface, install via [AstroBox](https://astrobox.online/) | ✅ | ✅ | ✅ |
 | **Fetch location from Apple** | ❌ | ✅ | ❌ |
+| View location on a map (`viewer/index.html`) | ✅ | ✅ | ✅ |
 
 **Fetching the location needs a Mac.** Apple only issues the fetch token to a native macOS "anisette" identity (as of 2026-10); emulating it elsewhere is experimental. Building and installing the watchface works everywhere.
 
@@ -98,6 +99,10 @@ python3 -m venv .venv
 ```
 
 If the band has been advertising and an Apple device passed near it, this prints the coordinates (and a Google Maps link). No report yet? Try again later — it depends on Apple devices nearby.
+
+### See it on a map (any platform)
+
+Open **`viewer/index.html`** in any browser and pick (or drag in) your `band9-location.json`. You get the location, an accuracy circle and how long ago it was seen. The map needs internet for tiles; your report file never leaves your machine.
 
 ---
 

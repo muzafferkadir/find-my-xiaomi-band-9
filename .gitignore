@@ -15,11 +15,10 @@ CLAUDE.md
 docs/HANDOFF.md
 docs/PUBLIC-RELEASE.md
 
-# Local-only (not published): research notes, native source, tests, viewer, Mac app
+# Local-only (not published): research notes, native source, tests, Mac app
 tests/
 native/
 docs/
-viewer/
 mac/
 assets/viewer.jpg
 assets/icon.png
