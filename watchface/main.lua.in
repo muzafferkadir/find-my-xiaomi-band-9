@@ -299,7 +299,7 @@ local events_screen=box(root,0,0,192,490)
 label(events_screen,"EVENTS",0,48,192,36,28,C.bpm,"Demibold",CENTER)
 label(events_screen,"from phone calendar",0,86,192,20,13,C.soft,"Regular",CENTER)
 local events_toggle=box(events_screen,14,116,164,60,C.card,22)
-label(events_toggle,"Show on face",16,18,92,24,15,C.text,"Demibold")
+label(events_toggle,"Show on\nface",16,10,88,42,15,C.text,"Demibold")
 local events_track,events_knob=switch(events_toggle,108,16)
 local events_upcoming,events_upcoming_value=row(events_screen,186,"Upcoming")
 events_upcoming_value:set{text_color=C.bpm}
