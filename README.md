@@ -76,7 +76,9 @@ python3 watchface/build.py
 
 ### 4. Install it on the band
 
-Open **AstroBox**, connect your band, and install `watchface/Band9FindMyV5.face`. Select the new face. It starts broadcasting automatically; tap the Find My pill for the Start / Stop screen.
+Open **AstroBox**, connect your band, and install `watchface/Band9FindMyV5.face`. Select the new face. It starts broadcasting automatically; tap **MENU** at the bottom for Find My (Start / Stop, Auto), Events and Agenda.
+
+**Calendar.** Turn on *Events* in Mi Fitness and the band syncs your phone calendar into the stock Calendar app. The face reads that same data, shows the next event on the main screen and lists upcoming ones under Agenda. It can be hidden from MENU → Events.
 
 > If AstroBox says *"Exceeded installed resource limit"*, the band is full — delete some old faces first.
 
